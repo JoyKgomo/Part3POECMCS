@@ -18,7 +18,7 @@ namespace POEPART2CMCSFINAL.Services
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=Claims-Data2.sqlite");
+            optionsBuilder.UseSqlite("Data Source=Claims-Data3.sqlite");
 
         }
 

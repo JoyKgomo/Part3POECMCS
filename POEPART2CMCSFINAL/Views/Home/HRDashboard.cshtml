@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Claim> 
+
+@{
+    ViewData["Title"] = "All Claims";
+}
+
+<h2>All Claims</h2>
+
+@if (!Model.Any())
+{
+    <p>No claims found.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var claim in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Submitted Claim</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">Claim ID: @claim.Id</h6>
+                        <p class="card-text">Hours Worked: @claim.HoursWorked</p>
+                        <p class="card-text">Hourly Rate: R @claim.HourlyRate</p> <!-- Format as currency -->
+                        <p class="card-text">Total Fee: R @claim.AmountDue</p> <!-- Format as currency -->
+                        <p class="card-text">Status: @claim.status</p> <!-- Use the actual status from the model -->
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<form action="@Url.Action("Dashboard", "Home")">
+    <button type="submit" class="btn btn-primary btn-block mb-2">Back</button>
+</form>

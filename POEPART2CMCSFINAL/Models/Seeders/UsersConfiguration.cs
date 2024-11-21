@@ -21,7 +21,7 @@ namespace POEPART2CMCSFINAL.Models.Seeders
                 },
                 new Users
                 {
-                    ID = 2,
+                    ID = 3,
                     Name = "Joy",
                     username = "joy@kg.com",
                     password = "joykgomo",
@@ -29,7 +29,7 @@ namespace POEPART2CMCSFINAL.Models.Seeders
                 },
                   new Users
                   {
-                      ID = 3,
+                      ID = 2,
                       Name = "Harry",
                       username = "hary@123.com",
                       password = "password2",

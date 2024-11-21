@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using POEPART2CMCSFINAL.Services;
 
@@ -10,9 +11,11 @@ using POEPART2CMCSFINAL.Services;
 namespace POEPART2CMCSFINAL.Migrations
 {
     [DbContext(typeof(ClaimContext))]
-    partial class ClaimContextModelSnapshot : ModelSnapshot
+    [Migration("20241121144601_InitialCreate0")]
+    partial class InitialCreate0
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -53,7 +56,7 @@ namespace POEPART2CMCSFINAL.Migrations
                         {
                             Id = 1,
                             AmountDue = 2400.0,
-                            DateClaimed = new DateTime(2024, 11, 21, 16, 57, 57, 162, DateTimeKind.Local).AddTicks(1281),
+                            DateClaimed = new DateTime(2024, 11, 21, 16, 46, 0, 909, DateTimeKind.Local).AddTicks(9609),
                             HourlyRate = 2000.0,
                             HoursWorked = 34,
                             UserID = 1,
@@ -63,7 +66,7 @@ namespace POEPART2CMCSFINAL.Migrations
                         {
                             Id = 2,
                             AmountDue = 2400.0,
-                            DateClaimed = new DateTime(2024, 11, 21, 16, 57, 57, 162, DateTimeKind.Local).AddTicks(1297),
+                            DateClaimed = new DateTime(2024, 11, 21, 16, 46, 0, 909, DateTimeKind.Local).AddTicks(9622),
                             HourlyRate = 2000.0,
                             HoursWorked = 34,
                             UserID = 2,

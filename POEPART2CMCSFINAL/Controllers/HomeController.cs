@@ -38,14 +38,16 @@ namespace POEPART2CMCSFINAL.Controllers
                 {
                     HttpContext.Session.SetInt32("UserId", person.ID);
                     HttpContext.Session.SetString("Role", person.role);
-                    if (person.role == "Lecturer")
+                    switch (person.role)
                     {
-                        return RedirectToAction("Dashboard");
+                        case "Lecturer":
+                            return RedirectToAction("Dashboard");
+                        case "HR":
+                            return RedirectToAction("HRDashboard");
+                        default:
+                            return RedirectToAction("ManagerDashboard");
                     }
-                    else
-                    {
-                        return RedirectToAction("ManagerDashboard");
-                    }
+
                 }
                 else
                 {
@@ -56,6 +58,17 @@ namespace POEPART2CMCSFINAL.Controllers
             }
             return View();
         }
+
+        [HttpGet]
+        public IActionResult HRDashboard()
+        {
+            var claims = claimContext.Claims.ToList();
+
+            // Pass the claims to the view
+            return View(claims);
+        }
+
+
         [HttpGet]
         public IActionResult Dashboard()
         {
@@ -138,7 +151,25 @@ namespace POEPART2CMCSFINAL.Controllers
 
             return View(model);
         }
-        public async Task<IActionResult> ManagerDashboard()
+
+        public IActionResult Download(int claimId)
+        {
+            var documents = documentService.GetClaimDocuments(claimId);
+            if (!documents.Any())
+            {
+                return Content("Filename is not provided.");
+            }
+            var document = documents.FirstOrDefault();
+            string filePath = Path.Combine(_environment.WebRootPath, "uploads", document.FileName);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return Content("File not found.");
+            }
+            byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+            return File(fileBytes, "application/octet-stream", document.FileName);
+        }
+    
+    public async Task<IActionResult> ManagerDashboard()
         {
             // Fetch users with claims
             var usersWithClaims = await claimContext.Users
