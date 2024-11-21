@@ -1,0 +1,53 @@
+﻿@model IEnumerable<POEPART2CMCSFINAL.Models.ClaimItemModel>
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="container my-5">
+    <h2>Welcome to Your Portal @ViewBag.UserProfile</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Claim Period</th>
+                <th scope="col">Hours Worked</th>
+                <th scope="col">Hourly Rate</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Document</th>
+                <th scope="col">Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.DateClaimed.ToString("MMMM yyyy")</td>
+                    <td>@item.Hours</td>
+                    <td>@item.rate</td>
+                    <td>@item.TotalFee</td>
+                    <td>
+                        <a asp-action="Download" asp-route-claimId="" class="btn btn-success">Documents</a>
+                    </td>
+                    <td>@item.status</td>
+                </tr>
+            }
+            }
+            else
+            {
+            <tr>
+             <td colspan="4" style="text-align: center;">No claims available.</td>
+             </tr>
+              }
+        </tbody>
+    </table>
+
+    <!-- Form for submitting a claim -->
+    <form action="@Url.Action("SubmitClaim", "Home")" >
+        <button type="submit" class="btn btn-primary btn-block mb-2">Submit a Claim</button>
+    </form>
+    <a href="/Home/Login" class="btn btn-secondary btn-block">Back</a>
+
+</div>

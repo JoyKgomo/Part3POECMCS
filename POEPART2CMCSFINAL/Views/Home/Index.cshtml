@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container text-center my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <h1 class="display-4 mb-3">Welcome to the IIE</h1>
+                    <h2 class="mb-4">Contract Monthly Claim System</h2>
+                    <p class="lead">Please click on the button below to login:</p>
+                    <form action="@Url.Action("Login", "Home")" method="post">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

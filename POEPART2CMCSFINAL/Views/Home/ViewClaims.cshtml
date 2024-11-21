@@ -1,0 +1,19 @@
+﻿@model Claim
+@{
+    ViewData["Title"] = "Claim Details";
+}
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">Submitted Claim</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">Claim ID: @Model.Id</h6>
+        <p class="card-text">Hours Worked: @Model.HoursWorked</p>
+        <p class="card-text">Hourly Rate: R @Model.HourlyRate</p> <!-- Format as currency -->
+        <p class="card-text">Total Fee: R @Model.AmountDue</p> <!-- Format as currency -->
+        <p class="card-text">Status: @Model.status</p> <!-- Use the actual status from the model -->
+       
+    </div>
+</div>
+<form action="@Url.Action("ManagerDashboard", "Home")">
+    <button type="submit" class="btn btn-primary btn-block mb-2">Back</button>
+</form>
