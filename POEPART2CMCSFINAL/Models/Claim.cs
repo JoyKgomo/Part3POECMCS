@@ -5,6 +5,8 @@ namespace POEPART2CMCSFINAL.Models
 {
     public class Claim
     {
+        internal IEnumerable<object> Documents;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

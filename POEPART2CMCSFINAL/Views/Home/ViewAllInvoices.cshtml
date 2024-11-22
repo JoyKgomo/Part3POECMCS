@@ -1,5 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<POEPART2CMCSFINAL.Models.InvoiceModel>
+
 @{
+    ViewData["Title"] = "View All Invoices";
+}
+
+<h2>All Invoices</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No invoices found.</p>
+}
+else
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Invoice Number</th>
+                <th>Lecturer Name</th>
+                <th>Date Issued</th>
+                <th>Claim Period</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var invoice in Model)
+            {
+                <tr>
+                    <td>@invoice.InvoiceNumber</td>
+                    <td>@invoice.LecturerName</td>
+                    <td>@invoice.DateIssued.ToString("yyyy-MM-dd")</td>
+                    <td>@invoice.ClaimPeriod</td>
+                    <td>@invoice.HoursWorked</td>
+                    <td>@invoice.HourlyRate.ToString("C")</td>
+                    <td>@invoice.TotalAmount.ToString("C")</td>
+                    <td>@invoice.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }

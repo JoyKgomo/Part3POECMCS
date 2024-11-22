@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using POEPART2CMCSFINAL.Models;
+using System.Globalization;
 
 namespace POEPART2CMCSFINAL.Services
 {
@@ -60,7 +61,7 @@ namespace POEPART2CMCSFINAL.Services
 
         public List<ClaimItemModel> GetAllClaimsForUser(int personId)
         {
-            
+
             // Fetch claims for the user
             var claims = (from c in claimContext.Claims
                           join u in claimContext.Users on c.UserID equals u.ID // Ensure correct property name
@@ -85,6 +86,68 @@ namespace POEPART2CMCSFINAL.Services
                          .ThenBy(x => x.status)
                          .ToList();
         }
+        public InvoiceModel GenerateInvoice(int claimId)
+        {
+            // Retrieve the claim from the database
+            var claim = claimContext.Claims.FirstOrDefault(x => x.Id == claimId);
+            if (claim == null)
+            {
+                Console.WriteLine("Claim not found for ID: " + claimId);
+                return null; // Return null if the claim is not found
+            }
 
+            // Retrieve lecturer information
+            var lecturer = claimContext.Users.FirstOrDefault(x => x.ID == claim.UserID);
+            if (lecturer == null)
+            {
+                Console.WriteLine("Lecturer not found for UserID: " + claim.UserID);
+                return null; // Return null if the lecturer is not found
+            }
+
+            // Generate invoice number
+            string invoiceNumber = $"INV-{claimId}-{DateTime.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture)}";
+
+            // Prepare the invoice model
+            var invoice = new InvoiceModel
+            {
+                InvoiceNumber = invoiceNumber,
+                LecturerName = lecturer.Name,
+                DateIssued = DateTime.Now,
+                ClaimPeriod = $"{claim.DateClaimed.ToString("MMM yyyy", CultureInfo.InvariantCulture)}",
+                HoursWorked = claim.HoursWorked,
+                HourlyRate = claim.HourlyRate,
+                TotalAmount = claim.AmountDue,
+                Status = claim.status
+            };
+
+            return invoice;
+        }
+
+        public List<InvoiceModel> GetAllInvoices()
+        {
+            // Fetch all claims along with their associated users
+            var invoices = (from c in claimContext.Claims
+                            join u in claimContext.Users on c.UserID equals u.ID
+                            select new InvoiceModel
+                            {
+                                InvoiceNumber = $"INV-{c.Id}-{c.DateClaimed.ToString("yyyyMMdd", CultureInfo.InvariantCulture)}",
+                                LecturerName = u.Name,
+                                DateIssued = c.DateClaimed,
+                                ClaimPeriod = $"{c.DateClaimed.ToString("MMM yyyy", CultureInfo.InvariantCulture)}",
+                                HoursWorked = c.HoursWorked,
+                                HourlyRate = c.HourlyRate,
+                                TotalAmount = c.AmountDue,
+                                Status = c.status
+                            }).ToList();
+
+            if (!invoices.Any())
+            {
+                Console.WriteLine("No invoices found.");
+            }
+
+            // Sort invoices by date issued, descending
+            return invoices.OrderByDescending(x => x.DateIssued).ToList();
+        }
+    
     }
 }

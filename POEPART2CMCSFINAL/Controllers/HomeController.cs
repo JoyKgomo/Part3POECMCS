@@ -4,6 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using POEPART2CMCSFINAL.Models;
 using POEPART2CMCSFINAL.Services;
 using System.Diagnostics;
+using System.Drawing;
+using System.Xml.Linq;
+
+
+
+
 
 namespace POEPART2CMCSFINAL.Controllers
 {
@@ -236,10 +242,28 @@ namespace POEPART2CMCSFINAL.Controllers
 
             return RedirectToAction("ManagerDashboard");
         }
-    
 
+        public IActionResult ViewAllInvoices()
+        {
+            // Get all invoices from the service
+            var allInvoices = claimService.GetAllInvoices();
+            return View(allInvoices);
+        }
 
-    public IActionResult Privacy()
+        public IActionResult GenerateInvoice(int id)
+        {
+            // Get the invoice details from the service
+            var invoice = claimService.GenerateInvoice(id);
+
+            if (invoice == null)
+            {
+                return NotFound("Invoice not found.");
+            }
+
+            return View(invoice);
+        }
+
+        public IActionResult Privacy()
         {
             return View();
         }

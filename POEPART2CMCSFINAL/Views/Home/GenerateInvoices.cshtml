@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model POEPART2CMCSFINAL.Models.InvoiceModel
+
 @{
+    ViewData["Title"] = "Generate Invoice";
+}
+
+<h2>Invoice Details</h2>
+
+@if (Model == null)
+{
+    <p>No invoice data available. Please try again later.</p>
+}
+else
+{
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4>Invoice Number: @Model.InvoiceNumber</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Lecturer Name:</strong> @Model.LecturerName</p>
+            <p><strong>Date Issued:</strong> @Model.DateIssued.ToString("yyyy-MM-dd")</p>
+            <p><strong>Claim Period:</strong> @Model.ClaimPeriod</p>
+            <p><strong>Hours Worked:</strong> @Model.HoursWorked</p>
+            <p><strong>Hourly Rate:</strong> @Model.HourlyRate.ToString("C")</p>
+            <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+        </div>
+    </div>
+
+    <br />
+    <div>
+        <a href="@Url.Action("ViewAllInvoices", "Invoice")" class="btn btn-secondary">Back to All Invoices</a>
+        <button onclick="window.print()" class="btn btn-success">Print Invoice</button>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById("printButton").onclick = function () {
+            window.print();  // Opens the print dialog for the current page
+        };
+    </script>
 }

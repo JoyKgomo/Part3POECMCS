@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using POEPART2CMCSFINAL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +46,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Invoice}/{action=ViewAllInvoices}/{id?}");
+
+
 app.Run();
 
 public class Startup
@@ -56,9 +62,13 @@ public class Startup
         // Register ClaimsContext with Dependency Injection
         services.AddDbContext<ClaimContext>(options =>
             options.UseSqlite("Data Source=Claims-Data.sqlite"));
-
+        // Add ClaimContext
+       
         // Register ClaimService with Dependency Injection
         services.AddScoped<ClaimService>();
+
+        // Register DocumentService
+        services.AddScoped<DocumentService>();
 
         // Add session support
         services.AddSession(options =>

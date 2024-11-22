@@ -7,10 +7,10 @@ namespace POEPART2CMCSFINAL.Services
 {
     public class DocumentService
     {
-        ClaimContext claimContext;
+        private readonly ClaimContext claimContext;
         public DocumentService(ClaimContext claimContext)
         {
-            claimContext = claimContext;
+            claimContext = claimContext ?? throw new ArgumentNullException(nameof(claimContext));
             claimContext.Database.EnsureCreated();
         }
 
@@ -37,8 +37,15 @@ namespace POEPART2CMCSFINAL.Services
         //get documents for a claim
         public List<Document> GetClaimDocuments(int claimId)
         {
-            var claimDocuments = claimContext.Documents.Where(x => x.Id == claimId).ToList();
-            return claimDocuments;
+            // Ensure ClaimContext is initialized
+            if (claimContext == null)
+            {
+                throw new InvalidOperationException("ClaimContext is not initialized.");
+            }
+
+            return claimContext.Documents
+                .Where(x => x.ClaimId == claimId) // Ensure you use the correct property (ClaimId)
+                .ToList();
         }
 
     }
