@@ -8,6 +8,6 @@ namespace POEPART2CMCSFINAL.Models
         public string username { get; set; }
         [Required]
         public string password { get; set; }
-        public string role { get; set; }
+       
     }
 }
