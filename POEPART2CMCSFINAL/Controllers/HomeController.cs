@@ -250,10 +250,10 @@ namespace POEPART2CMCSFINAL.Controllers
             return View(allInvoices);
         }
 
-        public IActionResult GenerateInvoice(int id)
+        public IActionResult GenerateInvoices()
         {
-            // Get the invoice details from the service
-            var invoice = claimService.GenerateInvoice(id);
+            int testId = 1; // Replace with a valid claim ID from your database
+            var invoice = claimService.GenerateInvoice(testId);
 
             if (invoice == null)
             {
@@ -262,6 +262,7 @@ namespace POEPART2CMCSFINAL.Controllers
 
             return View(invoice);
         }
+
 
         public IActionResult Privacy()
         {

@@ -21,15 +21,15 @@ else
             <p><strong>Date Issued:</strong> @Model.DateIssued.ToString("yyyy-MM-dd")</p>
             <p><strong>Claim Period:</strong> @Model.ClaimPeriod</p>
             <p><strong>Hours Worked:</strong> @Model.HoursWorked</p>
-            <p><strong>Hourly Rate:</strong> @Model.HourlyRate.ToString("C")</p>
-            <p><strong>Total Amount:</strong> @Model.TotalAmount.ToString("C")</p>
+            <p><strong>Hourly Rate:</strong> R @Model.HourlyRate</p>
+            <p><strong>Total Amount:</strong> R @Model.TotalAmount</p>
             <p><strong>Status:</strong> @Model.Status</p>
         </div>
     </div>
 
     <br />
     <div>
-        <a href="@Url.Action("ViewAllInvoices", "Invoice")" class="btn btn-secondary">Back to All Invoices</a>
+        <a href="@Url.Action("ViewAllInvoices", "Home")" class="btn btn-secondary">Back to All Invoices</a>
         <button onclick="window.print()" class="btn btn-success">Print Invoice</button>
     </div>
 }

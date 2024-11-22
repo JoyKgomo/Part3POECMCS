@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Claim> 
+﻿@model IEnumerable<Claim>
 
 @{
     ViewData["Title"] = "All Claims";
@@ -24,6 +24,9 @@ else
                         <p class="card-text">Hourly Rate: R @claim.HourlyRate</p> <!-- Format as currency -->
                         <p class="card-text">Total Fee: R @claim.AmountDue</p> <!-- Format as currency -->
                         <p class="card-text">Status: @claim.status</p> <!-- Use the actual status from the model -->
+
+                        <!-- Add a button that routes to the Generate Invoice page for the selected claim -->
+                        <a href="@Url.Action("GenerateInvoices", "Home")" class="btn btn-success">Generate Invoice</a>
                     </div>
                 </div>
             </div>
