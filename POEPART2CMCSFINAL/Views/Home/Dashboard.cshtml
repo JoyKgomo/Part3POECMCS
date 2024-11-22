@@ -29,7 +29,7 @@
                     <td>@item.rate</td>
                     <td>@item.TotalFee</td>
                     <td>
-                        <a asp-action="Download" asp-route-claimId="" class="btn btn-success">Documents</a>
+                            <a asp-action="Download" asp-route-claimId="@item.Id" class="btn btn-success">Documents</a>
                     </td>
                     <td>@item.status</td>
                 </tr>

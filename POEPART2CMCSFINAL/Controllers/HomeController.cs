@@ -69,14 +69,19 @@ namespace POEPART2CMCSFINAL.Controllers
         [HttpGet]
         public IActionResult HRDashboard()
         {
-            var claims = claimContext.Claims.ToList();
-            foreach (Claim c in claims)
+            // Filter claims with an "Approved" status
+            var approvedClaims = claimContext.Claims
+                                              .Where(c => c.status == "Approved")
+                                              .ToList();
+
+            // Debug: Print the IDs of the approved claims
+            foreach (var claim in approvedClaims)
             {
-                Console.WriteLine(c.Id);
+                Console.WriteLine(claim.Id);
             }
 
-            // Pass the claims to the view
-            return View(claims);
+            // Pass the approved claims to the view
+            return View(approvedClaims);
         }
 
 
@@ -152,8 +157,9 @@ namespace POEPART2CMCSFINAL.Controllers
                     var document = new Document();
                     document.FileName = model.Document.FileName;
                     document.DateUploaded = DateTime.Now;
-                    document.Id = claimId;
-                    documentService.AddClaimDocument(document);
+                    document.ClaimId = claimId;
+                    claimContext.Documents.Add(document);
+                    claimContext.SaveChanges();
                 }
                 return RedirectToAction("Dashboard");
 
@@ -165,7 +171,9 @@ namespace POEPART2CMCSFINAL.Controllers
 
         public IActionResult Download(int claimId)
         {
-            var documents = documentService.GetClaimDocuments(claimId);
+            var documents = claimContext.Documents
+                .Where(x => x.ClaimId == claimId) // Ensure you use the correct property (ClaimId)
+                .ToList();//documentService.GetClaimDocuments(claimId);
             if (!documents.Any())
             {
                 return Content("Filename is not provided.");
@@ -184,36 +192,80 @@ namespace POEPART2CMCSFINAL.Controllers
         {
             // Fetch users with their claims, including related claim data
             var usersWithClaims = await claimContext.Users
-                .Include(u => u.Claims)  // This includes all claims for each user
+                .Include(u => u.Claims) 
+                .Where(u => u.role == "Lecturer")// This includes all claims for each user
                 .ToListAsync();
 
             // Pass the list of users along with their claims to the view
             return View(usersWithClaims);
         }
 
+        [HttpPost]
+        public IActionResult ManagerDashboard(int claimID, string actionType)
+        {
+            // Check for a valid claim ID and action
+            if (claimID <= 0 || string.IsNullOrEmpty(actionType))
+            {
+                return BadRequest("Invalid claim ID or action.");
+            }
+
+            // Update the claim status based on the action
+            if (actionType == "app")
+            {
+                var claim = claimContext.Claims.FirstOrDefault(u => u.Id == claimID);
+                if (claim != null)
+                {
+                    claim.status = "Approved";
+                    claimContext.SaveChanges();
+                }
+                else
+                {
+                    return NotFound($"Claim with ID {claimID} not found.");
+                }
+            }
+            else if (actionType == "rej")
+            {
+                var claim = claimContext.Claims.FirstOrDefault(u => u.Id == claimID);
+                if (claim != null)
+                {
+                    claim.status = "Rejected";
+                    claimContext.SaveChanges();
+                }
+                else
+                {
+                    return NotFound($"Claim with ID {claimID} not found.");
+                }
+            }
+            else
+            {
+                return BadRequest("Invalid action specified.");
+            }
+
+            // Redirect or return a view after updating the status
+            return Redirect("ManagerDashboard");
+        }
+
+
         // View claims for a specific user by ID
         [HttpGet]
-        [Route("Home/ViewClaims/{userId}")]
-        public IActionResult ViewClaims(int userId)
+        [Route("Home/ViewClaims/{claimId}")]
+        public IActionResult ViewClaims(int claimId)
         {
             // Retrieve the user along with their claims
             var user = claimContext.Users
                 .Include(u => u.Claims) // Include claims for the user
-                .FirstOrDefault(x => x.ID == userId);
+                .FirstOrDefault(x => x.ID == claimId);
+
+            var claim = claimContext.Claims.FirstOrDefault(x => x.Id == claimId);
 
             // Check if user was found
-            if (user == null)
+            if (claim == null)
                 return View("NotFound");
 
-            // Get the most recent claim for the user
-            var mostRecentClaim = user.Claims.OrderByDescending(c => c.DateClaimed).FirstOrDefault();
-
-            // Check if a claim was found
-            if (mostRecentClaim == null)
-                return View("NotFound"); // or handle no claims appropriately
+   
 
             // Pass the most recent claim to the view
-            return View(mostRecentClaim);
+            return View(claim);
         }
 
 

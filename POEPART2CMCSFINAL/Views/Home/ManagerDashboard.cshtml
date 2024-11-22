@@ -26,34 +26,35 @@
                 <tbody>
                     @if (Model != null && Model.Any())
                     {
-                        @foreach (var item in Model)
+                        foreach (var user in Model)
                         {
-                            <tr>
-                                <td>@item.ID</td>
-                                <td>@item.Name</td>
-                                <td>
-                                    <a href="@Url.Action("ViewClaims", "Home", new { userId = item.ID })" class="btn btn-success">View</a>
-                                </td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <!-- Approve Claim Button -->
-                                        <form asp-action="ApproveClaim" method="post" style="display:inline;">
-                                            <input type="hidden" name="claimId" value="@item.Claims.FirstOrDefault()?.Id" />
-                                            <button type="submit" class="btn btn-success btn-sm">
-                                                <i class="fas fa-check"></i> Approve
-                                            </button>
-                                        </form>
-
-                                        <!-- Decline Claim Button -->
-                                        <form asp-action="DeclineClaim" method="post" style="display:inline;">
-                                            <input type="hidden" name="claimId" value="@item.Claims.FirstOrDefault()?.Id" />
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-times"></i> Decline
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
+                            foreach (var claim in user.Claims)
+                            {
+                                <tr>
+                                    <td>@user.ID</td>
+                                    <td>@user.Name</td>
+                                    <td>
+                                        <a href="@Url.Action("ViewClaims", "Home", new { claimId = claim.Id })" class="btn btn-success">View</a>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <!-- Approve Claim Button -->
+                                            <form asp-action="ManagerDashboard" method="post" asp-route-claimID="@claim.Id" asp-route-actionType="app" style="display:inline;">
+                                           
+                                                <button type="submit" name="action" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-check"></i> Approve
+                                                </button>
+                                                
+                                            </form>
+                                            <form asp-action="ManagerDashboard" method="post" asp-route-claimID="@claim.Id" asp-route-actionType="rej" style="display:inline;">
+                                                <button type="submit" name="action" value="rej" class="btn btn-danger btn-sm">
+                                                    <i class="fas fa-times"></i> Decline
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
                         }
                     }
                     else

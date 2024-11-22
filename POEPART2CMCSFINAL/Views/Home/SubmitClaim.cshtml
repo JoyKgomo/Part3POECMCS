@@ -6,7 +6,7 @@
 <div class="container">
     <h2>Submit a New Claim</h2>
 
-    <form method="post"  class="form-signin" asp-controller="Home" asp-action="SubmitClaim">​
+    <form method="post"  class="form-signin" asp-controller="Home"  enctype="multipart/form-data" asp-action="SubmitClaim">​
         <div class="form-group">
             <label for="ClaimPeriod">Claim Period:</label>
             <input type="month" id="ClaimPeriod" name="ClaimPeriod" required class="form-control" />
