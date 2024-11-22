@@ -20,6 +20,7 @@ namespace POEPART2CMCSFINAL.Controllers
         ClaimContext claimContext;
         ClaimService claimService;
         DocumentService documentService;
+        Claim Claim;
 
         public HomeController(ILogger<HomeController> logger, IWebHostEnvironment _environmentClaimContext, ClaimContext claimContext)
         {
@@ -69,6 +70,10 @@ namespace POEPART2CMCSFINAL.Controllers
         public IActionResult HRDashboard()
         {
             var claims = claimContext.Claims.ToList();
+            foreach (Claim c in claims)
+            {
+                Console.WriteLine(c.Id);
+            }
 
             // Pass the claims to the view
             return View(claims);
@@ -177,12 +182,12 @@ namespace POEPART2CMCSFINAL.Controllers
     
     public async Task<IActionResult> ManagerDashboard()
         {
-            // Fetch users with claims
+            // Fetch users with their claims, including related claim data
             var usersWithClaims = await claimContext.Users
-                .Include(u => u.Claims) // Include related claims
+                .Include(u => u.Claims)  // This includes all claims for each user
                 .ToListAsync();
 
-            // Pass the list of users to the view
+            // Pass the list of users along with their claims to the view
             return View(usersWithClaims);
         }
 
@@ -250,18 +255,22 @@ namespace POEPART2CMCSFINAL.Controllers
             return View(allInvoices);
         }
 
-        public IActionResult GenerateInvoices()
+        [HttpPost]
+        public IActionResult GenerateInvoices(int claimId)
         {
-            int testId = 1; // Replace with a valid claim ID from your database
-            var invoice = claimService.GenerateInvoice(testId);
+            // Fetch the invoice using the claim ID
+            var invoice = claimService.GenerateInvoice(claimId);
 
+            // Check if the invoice is null, which means the claim does not exist or is not approved
             if (invoice == null)
             {
-                return NotFound("Invoice not found.");
+                return NotFound($"Invoice could not be generated for Claim ID: {claimId}. It may not exist or is not approved.");
             }
 
+            // Pass the invoice to the view
             return View(invoice);
         }
+
 
 
         public IActionResult Privacy()

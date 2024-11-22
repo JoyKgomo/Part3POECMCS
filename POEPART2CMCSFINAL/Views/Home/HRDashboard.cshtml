@@ -17,17 +17,17 @@ else
         {
             <div class="col-md-4">
                 <div class="card mb-3" style="width: 18rem;">
-                    <div class="card-body">
+                    <form asp-controller="Home" asp-action="GenerateInvoices" method="post" class="card-body">
                         <h5 class="card-title">Submitted Claim</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">Claim ID: @claim.Id</h6>
                         <p class="card-text">Hours Worked: @claim.HoursWorked</p>
-                        <p class="card-text">Hourly Rate: R @claim.HourlyRate</p> <!-- Format as currency -->
-                        <p class="card-text">Total Fee: R @claim.AmountDue</p> <!-- Format as currency -->
-                        <p class="card-text">Status: @claim.status</p> <!-- Use the actual status from the model -->
+                        <p class="card-text">Hourly Rate: R @claim.HourlyRate</p>
+                        <p class="card-text">Total Fee: R @claim.AmountDue</p>
+                        <p class="card-text">Status: @claim.status</p>
+                        <input type="hidden" name="claimId" value="@claim.Id" />
+                        <button type="submit">Generate Invoice</button>
+                    </form>
 
-                        <!-- Add a button that routes to the Generate Invoice page for the selected claim -->
-                        <a href="@Url.Action("GenerateInvoices", "Home")" class="btn btn-success">Generate Invoice</a>
-                    </div>
                 </div>
             </div>
         }
